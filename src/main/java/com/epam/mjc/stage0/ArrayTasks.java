@@ -133,14 +133,9 @@ public class ArrayTasks {
      * arr = [[5, 4], [7]]       -> [[7], [4, 5]]
      */
     public int[][] sortRaggedArray(int[][] arr) {
-        int[][] result = new int[arr.length][];
-
         for (int y=0; y<arr.length-1; y++) {
             for (int x=y+1; x<arr.length; x++) {
-                int first = arr[y].length;
-                int second = arr[x].length;
-
-                if (first > second) {
+                if (arr[y].length > arr[x].length) {
                     int[] temp = arr[y];
                     arr[y] = arr[x];
                     arr[x] = temp;
@@ -148,18 +143,51 @@ public class ArrayTasks {
             }
         }
 
-        for (int y=0; y<arr.length; y++) {
-            for (int i=0; i<arr[y].length-1;i++) {
-                for (int j=i+1; j<arr[y].length; j++) {
-                    if (arr[y][j] < arr[y][i]) {
-                        int temp = arr[y][i];
-                        arr[y][i] = arr[y][j];
-                        arr[y][j] = temp;
-                    }
-                }
-            }
-            result[y] = arr[y];
+        for (int[] ints : arr) {
+            quickSort(ints, 0, ints.length - 1);
         }
-        return result;
+
+        return arr;
     }
+
+    public void quickSort(int[] arr, int low, int high) {
+        if (arr.length == 0) {
+            return;
+        }
+        if (low >= high) {
+            return;
+        }
+
+        int middle = low + (high - low) / 2;
+        int midElement = arr[middle];
+
+        int i = low;
+        int j = high;
+
+        while (i <= j) {
+            while (arr[i] < midElement) {
+                i++;
+            }
+
+            while (arr[j] > midElement) {
+                j--;
+            }
+
+            if (i <= j) {
+                int temp = arr[i];
+                arr[i] = arr[j];
+                arr[j] = temp;
+                i++;
+                j--;
+            }
+        }
+
+        if (low < j)
+            quickSort(arr, low, j);
+
+        if (high > i)
+            quickSort(arr, i, high);
+    }
+
+
 }
